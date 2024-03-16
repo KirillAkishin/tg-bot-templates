@@ -28,10 +28,6 @@ def text_processing(message):
     else:
         send_message(message, response_text=f'Ошибка.\n/help')
 
-### MAIN ###        
-def main():
-    bot.infinity_polling()
-    
+### MAIN ###
 if __name__ == '__main__':
-    main()
-    
+    bot.infinity_polling()
