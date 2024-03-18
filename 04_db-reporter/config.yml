@@ -1,0 +1,12 @@
+telegram:
+    token: aaaaaaaa:AAAAAAAAAAAAAAAAAAAAAAAAA!
+    
+path:
+    cache: ./cache
+    
+sql: 
+    host: host.com
+    port: 8888
+    database: shop_main
+    username: reader
+    password: admin
