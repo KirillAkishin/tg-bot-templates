@@ -1,20 +1,19 @@
 import utils
 logger = utils.get_logger(__name__)
+from database import DataBase
 import yaml
 with open("config.yml", "r") as f:
     cfg = yaml.load(f, Loader=yaml.loader.SafeLoader)
     token = cfg["telegram"]['token']  
     cache = cfg['path']['cache']
-    db_params = cfg['sql']
+    db_params = cfg['database']
 tg = utils.Telegram(token)
-db = utils.Conn(db_params)
+db = DataBase(db_params)
 
 ### FUNCTIONS ###
 def main_func(message):
-    condition = 'NULL' if str(message.text) == '' else str(message.text)
-    with open("request.sql", "r") as f:
-        sql_query = f.read().format(condition)
-    df = db.get_data(sql_query)
+    cond = 'NULL' if str(message.text) == '' else str(message.text)
+    df = db.request('request.sql', conditions=cond)
     if not os.path.exists(cache):
         os.makedirs(cache)
     file_name = os.path.join(cache, f'table_{condition}.xlsx')
