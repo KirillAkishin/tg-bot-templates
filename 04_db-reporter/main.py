@@ -16,7 +16,7 @@ def main_func(message):
     df = db.request('request.sql', conditions=cond)
     if not os.path.exists(cache):
         os.makedirs(cache)
-    file_name = os.path.join(cache, f'table_{condition}.xlsx')
+    file_name = os.path.join(cache, f'table_{cond}.xlsx')
     if os.path.exists(file_name):
         os.remove(file_name)
     wb = xl.Workbook()
