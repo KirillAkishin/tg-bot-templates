@@ -11,7 +11,5 @@ database:
         database: shop_main
         username: reader
         password: admin    
-    cache:
-        groups: group.csv
-    
+
     
