@@ -63,7 +63,7 @@ class DataBase():
         if 'cache' in db_params:
             self.cache = {}
             for name, filename in db_params['cache'].items():
-                self.cache[name] = pd.read_csv(filename)
+                self.cache[name] = filename
         self.conn = None
         if 'connection' in db_params:
             self.conn = DBConn(**db_params['connection'])

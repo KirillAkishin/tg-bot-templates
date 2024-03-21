@@ -21,8 +21,8 @@ def get_excel_from_db(message):
     return open(filename, 'rb')
 
 def get_excel_from_file(message):
-    table_name = 'NULL' if str(message.text) == '' else str(message.text)
-    filename = os.path.join(data_dir, f'{table_name}.xlsx')
+    item = message.text.strip('/')
+    filename = db.cache[item]
     return open(filename, 'rb')
 
 ### HANDLERS ###
