@@ -1,3 +1,5 @@
+import os
+import pandas as pd
 import utils
 logger = utils.get_logger(__name__)
 from database import DataBase
@@ -5,27 +7,23 @@ import yaml
 with open("config.yml", "r") as f:
     cfg = yaml.load(f, Loader=yaml.loader.SafeLoader)
     token = cfg["telegram"]['token']  
-    cache = cfg['path']['cache']
+    data_dir = cfg['path']['data']
     db_params = cfg['database']
 tg = utils.Telegram(token)
 db = DataBase(db_params)
 
 ### FUNCTIONS ###
-def main_func(message):
+def get_excel_from_db(message):
     cond = 'NULL' if str(message.text) == '' else str(message.text)
-    df = db.request('request.sql', conditions=cond)
-    if not os.path.exists(cache):
-        os.makedirs(cache)
-    file_name = os.path.join(cache, f'table_{cond}.xlsx')
-    if os.path.exists(file_name):
-        os.remove(file_name)
-    wb = xl.Workbook()
-    ws = wb.active
-    ws.title = "title"
-    wb.save(file_name)
-    with pd.ExcelWriter(file_name, datetime_format='DD/MM/YYYY') as writer:
-        df.to_excel(writer, sheet_name='sheet', index=False)
-    return file_name
+    df = db.conn.request('request.sql', conditions=cond)
+    filename = os.path.join(data_dir, f'table_{cond}.xlsx')
+    utils.save_excel(df, filename)
+    return open(filename, 'rb')
+
+def get_excel_from_file(message):
+    table_name = 'NULL' if str(message.text) == '' else str(message.text)
+    filename = os.path.join(data_dir, f'{table_name}.xlsx')
+    return open(filename, 'rb')
 
 ### HANDLERS ###
 @tg.message_handler(commands=["help"])
@@ -37,10 +35,10 @@ def help_processing(message):
 def text_processing(message): 
     logger.warning(message.text)
     tg.send_message(message, response_text='Обработка запроса.')
-    result = main_func(message)
+    result = get_excel_from_db(message)
+#     result = get_excel_from_file(message)
     if result:
-        with open(result, 'rb') as f: 
-            tg.send_document(message, f)
+        tg.send_document(message, result)
     else:
         tg.send_message(message, response_text=f'Ошибка.\n/help')
 

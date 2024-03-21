@@ -6,7 +6,6 @@ from sqlalchemy import Column, Integer, String, Numeric, ARRAY
 from sqlalchemy.engine.url import URL
 from time import sleep
     
-
 class DBConn(object):
     """DataBase (PostgreSQL) connector"""
 
@@ -56,17 +55,17 @@ class DBConn(object):
         with self._engine.connect() as conn:
             conn.execute(query)
             
-            
-class DataBase(DBConn):
+class DataBase():
     """DataBase adapter"""
     
     def __init__(self, db_params):
         self.cache = None
-        if 'local' in db_params:
-            filename = db_params['local']['filename']
-            self.cache[filename] = pd.read_csv(filename)
-        if 'sql' in db_params:
-            DBConn.__init__(self, **db_params)
+        if 'cache' in db_params:
+            for name, filename in db_params['cache'].items():
+                self.cache[name] = pd.read_csv(filename)
+        self.conn = None
+        if 'connection' in db_params:
+            self.conn = DBConn(**db_params['connection'])
     
      
 
