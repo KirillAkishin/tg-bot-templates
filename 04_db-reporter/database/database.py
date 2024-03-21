@@ -17,7 +17,7 @@ class DBConn(object):
             'host': host,
             'port': port,
             'database': database,}
-        self._url = URL(**db_url)
+        self._url = URL.create(**db_url)
         self._engine = create_engine(self._url)
         self._attempts = attempts
 
@@ -61,6 +61,7 @@ class DataBase():
     def __init__(self, db_params):
         self.cache = None
         if 'cache' in db_params:
+            self.cache = {}
             for name, filename in db_params['cache'].items():
                 self.cache[name] = pd.read_csv(filename)
         self.conn = None

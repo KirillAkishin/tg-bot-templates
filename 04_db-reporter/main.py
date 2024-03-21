@@ -15,7 +15,7 @@ db = DataBase(db_params)
 ### FUNCTIONS ###
 def get_excel_from_db(message):
     cond = 'NULL' if str(message.text) == '' else str(message.text)
-    df = db.conn.request('request.sql', conditions=cond)
+    df = db.conn.request('database/request.sql', conditions=cond)
     filename = os.path.join(data_dir, f'table_{cond}.xlsx')
     utils.save_excel(df, filename)
     return open(filename, 'rb')

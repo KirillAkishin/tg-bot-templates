@@ -1,5 +1,5 @@
 telegram:
-    token: aaaaaaaa:AAAAAAAAAAAAAAAAAAAAAAAAA!
+    token: tokentokentokentokentokentokentokentokentoken
     
 path:
     data: ./data
@@ -11,5 +11,7 @@ database:
         database: shop_main
         username: reader
         password: admin    
-
+    cache:
+        groups: database/group.csv
+    
     
