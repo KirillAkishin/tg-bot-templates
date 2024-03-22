@@ -9,7 +9,7 @@ with open("config.yml", "r") as f:
 
 ### GLOBE ###
 tg = utils.Telegram(token)
-keyboard = utils.widgets.calculater
+keyboard = utils.widgets.calc_inline
 value = ""
 old_value = ""
 
