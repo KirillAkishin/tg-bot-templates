@@ -1,0 +1,18 @@
+telegram:
+    token: 6054621962:AAGkZ4Wga2pdSwhYGJvNVMD-S2vO8GC2ZxY
+    
+path:
+    cache: data/cache
+    
+database: 
+    server:
+        host: host.com
+        port: 8888
+        database: shop_main
+        username: reader
+        password: admin    
+    local:
+        groups: data/user/group.csv
+        users: data/user/users.csv
+    
+    
