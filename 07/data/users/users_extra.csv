@@ -1,0 +1,3 @@
+user_id,username,is_bot,first_name,last_name,is_premium,language_code,can_join_groups,can_read_all_group_messages,supports_inline_queries,added_to_attachment_menu
+12345678,,,,,,,,,,
+9876543,,,,,,,,,,

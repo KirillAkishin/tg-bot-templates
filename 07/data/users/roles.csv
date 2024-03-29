@@ -1,0 +1,7 @@
+role_id,role_name,description,is_admin,is_authorized,is_banned
+0,owner,"Project owner. He has the same capability as admins, but he is the owner of the token.",True,True,False
+1,admin,They can do everything with a bot.,True,True,False
+10,vip,Privileged users. They can more capability than regular users.,False,True,False
+100,user,Regular users.,False,True,False
+1000,guest,Identified but unauthorized users.,False,False,False
+10000,banned,Unwanted users.,False,False,True
