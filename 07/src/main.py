@@ -11,12 +11,13 @@ with open("config.yaml", "r") as f:
     cfg = yaml.load(f, Loader=yaml.loader.SafeLoader)
     token = cfg["telegram"]['token']  
     data_dir = cfg['path']['cache']
-    db_params = cfg['database']
+    token_file = cfg["telegram"]['token_file']
 
 ### GLOBE ###
 logger = logging.getLogger(__name__)
 db = DataBase(db_params)
-bot = tg.Bot(token)
+with open(token_file) as token:
+    bot = tg.Bot(token.read())
 h = tg.Handler(bot)
 # users = utils.users.UserManager(db.get('users'))
 users = pd.read_csv('./data/users/users.csv', index_col='user_id')

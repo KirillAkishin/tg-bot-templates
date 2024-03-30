@@ -1,5 +1,5 @@
 telegram:
-    token: dasdasdasd
+    token_file: token.txt
     
 path:
     cache: data/cache
