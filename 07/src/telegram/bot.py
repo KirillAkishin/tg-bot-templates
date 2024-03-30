@@ -1,14 +1,15 @@
 import telebot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, Message
 import time
+import random
 import numpy as np
 from .handlers import UserHandler
+from . import extra
 import logging
 logger = logging.getLogger(__name__)  
         
 ### UTILITY ###
 # def error_handler():
-print(UserHandler)
 
 def logger_decorator(event='send', item=None, level='info'):
     def decorator(func): 
@@ -37,10 +38,15 @@ def logger_record(args, event, item=None, level='info'):
     if event == 'receive':
         event = 'RECEIVED from'
         item = 'a ' + (item if item else 'message') + ':'
-        text = trim_text(m.text)
-    rec = f"bot {event:<15s} {user:<30s} {item:<20s} {text}".strip()
+        text = trim_text(m.text) if m.text else ''
+    if text == '':
+        if m.animation and event=='RECEIVED from':
+            text = m.animation.file_id
+        else:
+            item = item.replace(':','.')
+    rec = f"bot {event:<15s} {user:<30s} {item:<15s} {text}".strip()
     return getattr(logger, level)(rec)
-    
+
 ### CUSTOM TELEBOT ###
 class Sender:
     def __init__(self, bot):
@@ -63,6 +69,15 @@ class Sender:
         return self.bot.send_message(message.chat.id, text)
     
     @timeout_decorator()
+    @logger_decorator(item='gif')
+    def animation(self, message, gif_name=None):
+        if gif_name in extra.gif_ids['common']:
+            gif_id = extra.gif_ids[gif_name]
+        else:
+            gif_name, gif_id = random.choice(list(extra.gif_ids['okay'].items()))
+        return self.bot.send_animation(message.chat.id, gif_id)
+    
+    @timeout_decorator()
     @logger_decorator(item='document')
     def document(self, message, file):
         return self.bot.send_document(message.chat.id, file)
@@ -79,6 +94,11 @@ class Sender:
     @logger_decorator(item='reply')
     def reply(self, *args, **kwargs):
         return self.bot.reply_to(*args, **kwargs)
+    
+    @timeout_decorator(timeout=2)
+    @logger_decorator(item='reject', level='warning')
+    def reject(self, msg, text='access denied'):
+        return self.bot.send_message(msg.chat.id, text)
 
 class Bot(telebot.TeleBot):
     def __init__(self, token):
@@ -91,15 +111,17 @@ class Bot(telebot.TeleBot):
         logger.critical('bot restarted')
         return super().infinity_polling(*args, **kwargs)
     
-    @classmethod 
-    def logger_decorator(cls, event='receive', item=None, level='warning'):
-        return logger_decorator(event, item=item, level=level)
-    
-    @classmethod 
-    def check(role):
+    def check_permission(self, is_developer=None, is_admin=None, is_authorized=True, is_banned=False, role=None):
         def decorator(func): 
-            def inner(*args, **kwargs): 
-                return func(*args, **kwargs)
+            def inner(*args, **kwargs):
+                if self.user_handler._check_permission(
+                    is_developer,is_admin,is_authorized,is_banned,role, args):
+                    return func(*args, **kwargs)
+                else:
+                    return self.send.reject(*args, **kwargs)
             return inner 
         return decorator
     
+    @classmethod 
+    def logger_decorator(cls, event='receive', item=None, level='warning'):
+        return logger_decorator(event, item=item, level=level)
