@@ -1,0 +1,10 @@
+role_id,role_name,description,is_dev,is_admin,is_moder,is_auth,is_ban
+0,owner,owner of the token,True,True,True,True,False
+1,dev,project developers,True,True,True,True,False
+2,admin,bot managers,False,True,True,True,False
+3,moder,more capability,False,False,True,True,False
+4,vip,slightly more capability,False,False,False,True,False
+5,user,regular users,False,False,False,True,False
+6,restricted,mute or smth else,False,False,False,True,False
+7,guest,identified but unauthorized,False,False,False,False,False
+8,banned,unwanted users,False,False,False,False,True

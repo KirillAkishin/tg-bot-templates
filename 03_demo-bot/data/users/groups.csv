@@ -1,0 +1,3 @@
+group_id,group_name,description
+-1,all,All users.
+777,donator,Those who paid money at least once.

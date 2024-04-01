@@ -1,0 +1,29 @@
+telegram:
+    token_file: configs/token.txt
+    debugging_chat_id: null
+    
+path:
+    tmp: data/tmp
+    sql: data/sql
+    media: data/media
+    
+database: 
+    local:
+        users: data/users/users.csv
+        roles: data/users/roles.csv
+        groups: data/users/groups.csv
+    remotes:
+        server_one:
+            drivername: postgresql
+            host: host.one.ru
+            password: pass
+            port: 8888
+            database: main
+            username: reader
+        server_two:
+            drivername: postgresql
+            host: host.one.ru
+            password: pass
+            port: 8888
+            database: main
+            username: reader
